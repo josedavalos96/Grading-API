@@ -21,6 +21,6 @@ router.patch("/:id", studentsController.editStudent);
 
 // Handles incoming DELETE requests to /students/:id
 // returns a message and the number of changes performed
-router.delete("/:id", studentsController.deleteStundet);
+router.delete("/:id", studentsController.deleteStudent);
 
 module.exports = router;

@@ -21,7 +21,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                 if(err){
                     /// table already created
                 }else{
-                    console.log("Insert Data");
+                    console.log("Insert Data: student");
                     // Table created just now. Adding some random values
                     var insert = 'INSERT INTO student (name, createdAt ) VALUES (?,?)';
 
@@ -30,10 +30,31 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                     db.run(insert, ['Daniel', today ]);
                     db.run(insert, ['Camila', today ]);
                 }
-             });
+             }
+        );
 
         //create Table Worksheet
+        db.run('CREATE TABLE worksheet (\
+            id INTEGER PRIMARY KEY AUTOINCREMENT,\
+            studentId INTEGET,\
+            createdAt TIMESTAMP DEFAULT TIMESTAMP,\
+            updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
+            deletedAt TIMESTAMP DEFAULT TIMESTAMP\
+            )',
+            (err) => {
+                if(err){
+                    /// table already created
+                }else{
+                    console.log("Insert Data: worksheet");
+                    var insert = 'INSERT INTO worksheet (studentId, createdAt) VALUES (?,?)';
+                    var today = Date();
 
+                    db.run(insert, [1,today]);
+                    db.run(insert, [2,today]);
+                    db.run(insert, [3,today]);
+                }
+            }
+        );
         //create Table Question
     }
 });

@@ -101,7 +101,7 @@ const editStudent = async (req, res) => {
             res.json({
                 message: "success",
                 changes: this.changes,
-            })
+            });
         });
           
     } catch (error) {
@@ -110,7 +110,7 @@ const editStudent = async (req, res) => {
 };
 
 
-const deleteStundet = async (req, res) => {
+const deleteStudent = async (req, res) => {
     try {
 
         const id = req.params.id;
@@ -145,4 +145,4 @@ exports.getAllStudents = getAllStudents;
 exports.getStudentById = getStudentById;
 exports.createStudent = createStudent;
 exports.editStudent = editStudent;
-exports.deleteStundet = deleteStundet;
+exports.deleteStudent = deleteStudent;

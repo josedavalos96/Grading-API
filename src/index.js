@@ -8,6 +8,7 @@ app.use(express.json());
 
 
 app.use("/v1/students/", routes.student);
+app.use("/v1/worksheet/", routes.worksheet);
 
 
 // Root of project
