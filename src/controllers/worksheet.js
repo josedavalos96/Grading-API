@@ -1,6 +1,6 @@
 
 var db = require("../database.js");
-const { param } = require("../routes/student.js");
+
 
 const getAllWorksheets = async (req, res) => {
     try{

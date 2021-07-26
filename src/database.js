@@ -36,7 +36,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         //create Table Worksheet
         db.run('CREATE TABLE worksheet (\
             id INTEGER PRIMARY KEY AUTOINCREMENT,\
-            studentId INTEGET,\
+            studentId INTEGER,\
             createdAt TIMESTAMP DEFAULT TIMESTAMP,\
             updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
             deletedAt TIMESTAMP DEFAULT TIMESTAMP\
@@ -56,6 +56,28 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             }
         );
         //create Table Question
+        db.run('CREATE TABLE question (\
+            id INTEGER PRIMARY KEY AUTOINCREMENT,\
+            worksheetId INTEGER,\
+            temperatureIn INTEGER,\
+            typeIn TEXT,\
+            typeTarget,\
+            studentResponse,\
+            grade,\
+            createdAt TIMESTAMP DEFAULT TIMESTAMP,\
+            updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
+            deletedAt TIMESTAMP DEFAULT TIMESTAMP\
+            )',
+            (err) => {
+                if(err){
+                     /// table already created
+                }else{
+                    console.log("Insert Data: question");
+                    var insert = 'INSERT INTO question (worksheetId, temperatureIn, typeIn, typeTarget, studentResponse, grade, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                    var today = Date();
+                    db.run(insert, [1, 19.5, "Celcius", "Farenheit", 67.1, "Correct", today]);
+                }
+            });
     }
 });
 
