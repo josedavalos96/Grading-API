@@ -12,7 +12,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         // create Table student
         db.run('CREATE TABLE student (\
             id INTEGER PRIMARY KEY AUTOINCREMENT,\
-            worksheetId INTEGER,\
             name text,\
             createdAt TIMESTAMP DEFAULT TIMESTAMP,\
             updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
@@ -21,17 +20,15 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
              (err) => {                
                 if(err){
                     /// table already created
-                    console.log("Table already created");
-                    console.error(err);
                 }else{
                     console.log("Insert Data");
                     // Table created just now. Adding some random values
-                    var insert = 'INSERT INTO student (worksheetId, name, createdAt ) VALUES (?,?,?)';
+                    var insert = 'INSERT INTO student (name, createdAt ) VALUES (?,?)';
 
                     var today = Date();
-                    db.run(insert, [1,'Jose', today ]);
-                    db.run(insert, [2,'Daniel', today ]);
-                    db.run(insert, [3,'Camila', today ]);
+                    db.run(insert, ['Jose', today ]);
+                    db.run(insert, ['Daniel', today ]);
+                    db.run(insert, ['Camila', today ]);
                 }
              });
 
