@@ -10,7 +10,7 @@ router.get("/:worksheetId", questionController.getQuestionsByWorksheetId);
 
 router.patch("/:questionId", questionController.editQuestion);
 
-router.post("/", questionController.postQuestion);
+router.post("/:worksheetId", questionController.postQuestion);
 
 router.delete("/:questionId", questionController.deleteQuestion);
 

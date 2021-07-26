@@ -66,8 +66,37 @@ const editQuestion = (req, res) => {
     }
 }
 
+//* 1. get all input parameters from body
+//* 2. try and parse numeric values, throw err if non-numeric
+//* 3. get input type and input target
+//* 4. transform input value into the desired target
+//* 5. compare with studentResponse
+//* 6. set grade and post to DB.
 const postQuestion = (req, res) => {
-    //TODO: implement post question
+    //1 
+    //required to assign question to a worksheet
+    const worksheetId = req.params.worksheetId;
+    const temperatureIn = req.body.temperatureIn;
+    const typeIn = req.body.typeIn;
+    const typeTarget = req.body.typeTarget;
+    const studentResponse = req.body.studentResponse;
+
+    //check for empty values
+    if(!temperatureIn || !typeIn || !typeTarget || !studentResponse){
+        res.status(400).json({"error": "All 4 parameters are required"});
+        return;
+    }
+
+    //2
+    var temperature = parseFloat(temperatureIn)
+    var stdResponse = parseFloat(studentResponse);
+
+    if(isNaN(temperature) || isNaN(stdResponse)){
+        res.status(400).json({"error": "Either Input Temperature or Students\' response isn\'t a numeric value"});
+        return;
+    }
+
+    res.status(200).json({"data": [temperature.toFixed(1), stdResponse.toFixed(1)]});
 }
 
 const deleteQuestion = (req, res) => {
