@@ -1,0 +1,23 @@
+{
+  "name": "grading-api",
+  "version": "1.0.0",
+  "description": "simple API that collects and grades worksheets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josedavalos96/Grading-API.git"
+  },
+  "author": "Jose Davalos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josedavalos96/Grading-API/issues"
+  },
+  "homepage": "https://github.com/josedavalos96/Grading-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}
