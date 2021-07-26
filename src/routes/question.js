@@ -6,6 +6,12 @@ const router = express.Router();
 
 router.get("/", questionController.getAllQuestions);
 
+router.get("/:worksheetId", questionController.getQuestionsByWorksheetId);
 
+router.patch("/:questionId", questionController.editQuestion);
+
+router.post("/", questionController.postQuestion);
+
+router.delete("/:questionId", questionController.deleteQuestion);
 
 module.exports = router;

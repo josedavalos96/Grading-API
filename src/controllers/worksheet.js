@@ -2,7 +2,7 @@
 var db = require("../database.js");
 
 
-const getAllWorksheets = async (req, res) => {
+const getAllWorksheets = (req, res) => {
     try{
 
         var query = 'SELECT * FROM worksheet';
@@ -23,7 +23,7 @@ const getAllWorksheets = async (req, res) => {
     }
 };
 
-const getWorksheetsByStudentId = async (req, res) => {
+const getWorksheetsByStudentId = (req, res) => {
 
     try {
 
@@ -48,7 +48,7 @@ const getWorksheetsByStudentId = async (req, res) => {
     }
 }
 
-const createWorksheetforStudent = async (req, res) => {
+const createWorksheetforStudent = (req, res) => {
     try {
         const studentId = req.params.studentId;
         const today = Date();
@@ -71,7 +71,7 @@ const createWorksheetforStudent = async (req, res) => {
     }
 }
 
-const editWorksheetByStudentId = async (req, res) => {
+const editWorksheetByStudentId = (req, res) => {
 
     try {
         const worksheetId = req.params.worksheetId;
@@ -106,7 +106,7 @@ const editWorksheetByStudentId = async (req, res) => {
 }
 
 
-const deleteWorksheet = async (req, res) => {
+const deleteWorksheet = (req, res) => {
     try {
         const worksheetId = req.params.worksheetId;
 

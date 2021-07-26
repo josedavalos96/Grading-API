@@ -1,7 +1,7 @@
 var db = require("../database.js");
 
 // get all students listed in the Db
-const getAllStudents = async (req, res) => {
+const getAllStudents = (req, res) => {
     try{
 
         var query = 'SELECT * FROM student';
@@ -22,7 +22,7 @@ const getAllStudents = async (req, res) => {
     }
 }
 // get student by single Id
-const getStudentById = async (req, res) => {
+const getStudentById = (req, res) => {
     try {
 
         var query = 'SELECT * FROM student WHERE id = ?';
@@ -45,7 +45,7 @@ const getStudentById = async (req, res) => {
 }
 
 // create a stundet record
-const createStudent = async (req, res) => {
+const createStudent = (req, res) => {
     try {
 
         const name = req.body.name;
@@ -75,7 +75,7 @@ const createStudent = async (req, res) => {
 };
 
 // edit a student name record
-const editStudent = async (req, res) => {
+const editStudent = (req, res) => {
     try {
 
         const id = req.params.id;
@@ -110,7 +110,7 @@ const editStudent = async (req, res) => {
 };
 
 
-const deleteStudent = async (req, res) => {
+const deleteStudent = (req, res) => {
     try {
 
         const id = req.params.id;
