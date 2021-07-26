@@ -12,7 +12,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         // create Table student
         db.run('CREATE TABLE student (\
             id INTEGER PRIMARY KEY AUTOINCREMENT,\
-            worksheetId INTEGER,\
             name text,\
             createdAt TIMESTAMP DEFAULT TIMESTAMP,\
             updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
@@ -21,23 +20,64 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
              (err) => {                
                 if(err){
                     /// table already created
-                    console.log("Table already created");
-                    console.error(err);
                 }else{
-                    console.log("Insert Data");
+                    console.log("Insert Data: student");
                     // Table created just now. Adding some random values
-                    var insert = 'INSERT INTO student (worksheetId, name, createdAt ) VALUES (?,?,?)';
+                    var insert = 'INSERT INTO student (name, createdAt ) VALUES (?,?)';
 
                     var today = Date();
-                    db.run(insert, [1,'Jose', today ]);
-                    db.run(insert, [2,'Daniel', today ]);
-                    db.run(insert, [3,'Camila', today ]);
+                    db.run(insert, ['Jose', today ]);
+                    db.run(insert, ['Daniel', today ]);
+                    db.run(insert, ['Camila', today ]);
                 }
-             });
+             }
+        );
 
         //create Table Worksheet
+        db.run('CREATE TABLE worksheet (\
+            id INTEGER PRIMARY KEY AUTOINCREMENT,\
+            studentId INTEGER,\
+            createdAt TIMESTAMP DEFAULT TIMESTAMP,\
+            updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
+            deletedAt TIMESTAMP DEFAULT TIMESTAMP\
+            )',
+            (err) => {
+                if(err){
+                    /// table already created
+                }else{
+                    console.log("Insert Data: worksheet");
+                    var insert = 'INSERT INTO worksheet (studentId, createdAt) VALUES (?,?)';
+                    var today = Date();
 
+                    db.run(insert, [1,today]);
+                    db.run(insert, [2,today]);
+                    db.run(insert, [3,today]);
+                }
+            }
+        );
         //create Table Question
+        db.run('CREATE TABLE question (\
+            id INTEGER PRIMARY KEY AUTOINCREMENT,\
+            worksheetId INTEGER,\
+            temperatureIn INTEGER,\
+            typeIn TEXT,\
+            typeTarget,\
+            studentResponse,\
+            grade,\
+            createdAt TIMESTAMP DEFAULT TIMESTAMP,\
+            updatedAt TIMESTAMP DEFAULT TIMESTAMP,\
+            deletedAt TIMESTAMP DEFAULT TIMESTAMP\
+            )',
+            (err) => {
+                if(err){
+                     /// table already created
+                }else{
+                    console.log("Insert Data: question");
+                    var insert = 'INSERT INTO question (worksheetId, temperatureIn, typeIn, typeTarget, studentResponse, grade, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                    var today = Date();
+                    db.run(insert, [1, 19.5, "Celcius", "Farenheit", 67.1, "Correct", today]);
+                }
+            });
     }
 });
 

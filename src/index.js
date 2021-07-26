@@ -5,10 +5,9 @@ const routes = require("./routes/routes");
 const PORT = 3000;
 app.use(express.json());
 
-
-
 app.use("/v1/students/", routes.student);
-
+app.use("/v1/worksheet/", routes.worksheet);
+app.use("/v1/question/", routes.question);
 
 // Root of project
 app.use("/", (req, res) => {
