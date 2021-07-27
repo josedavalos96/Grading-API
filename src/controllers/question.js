@@ -44,8 +44,8 @@ const getQuestionsByWorksheetId = (req, res) => {
     try {
         const worksheetId = req.params.worksheetId;
 
-        var query = 'SELECt * FROM question WHERE id = ?'
-        var params = [worksheetId];
+        var query = 'SELECT * FROM question WHERE worksheetId = ?'
+        var params = [ worksheetId ];
 
         db.all(query, params, function(err, rows){
             if (err) {
