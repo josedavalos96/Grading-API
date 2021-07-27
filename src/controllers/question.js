@@ -95,6 +95,8 @@ const postQuestion = (req, res) => {
         res.status(400).json({"error": "Either Input Temperature or Students\' response isn\'t a numeric value"});
         return;
     }
+    //3 
+    
 
     res.status(200).json({"data": [temperature.toFixed(1), stdResponse.toFixed(1)]});
 }
