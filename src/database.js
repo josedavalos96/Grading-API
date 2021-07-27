@@ -75,7 +75,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                     console.log("Insert Data: question");
                     var insert = 'INSERT INTO question (worksheetId, temperatureIn, typeIn, typeTarget, studentResponse, grade, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
                     var today = Date();
-                    db.run(insert, [1, 19.5, "Celcius", "Farenheit", 67.1, "Correct", today]);
+                    db.run(insert, [1, 19.5, "Celsius", "Farenheit", 67.1, "Correct", today]);
                 }
             });
     }
