@@ -2,15 +2,15 @@
 
 ## Table of contents
 
-- Prerequisites
-- Install
-- Run app
-- Entity Relationship Diagram
-- Example Usage
-- REST API
-  - Students
-  - Worksheets
-  - Questions
+- [Prerequisites](#prerequisites)
+- [Install](#install)
+- [Run the app](#run-the-app)
+- [Entity Relationship Diagram](#entity-relationship-diagram-erd)
+- [Example Usage](#example-usage)
+- [REST API](#rest-api)
+  - [Students](#get-all-students)
+  - [Worksheets](#get-all-worksheets)
+  - [Questions](#get-all-questions-stored)
   
 ## Prerequisites
 
