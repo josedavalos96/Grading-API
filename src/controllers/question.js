@@ -1,4 +1,20 @@
 var db = require("../database.js");
+const converter = require("../utils/converter");
+
+const decimalPlaces = 1;
+
+const units = {
+	KELVIN: "K",
+	CELSIUS: "C",
+	FAHRENHEIT: "F",
+	RANKIE: "R",
+}
+
+const grades = {
+    CORRECT: "correct",
+    INCORRECT: "incorrect",
+    INVALID: "invalid"
+}
 
 
 const getAllQuestions = (req, res) => {
@@ -54,12 +70,42 @@ const editQuestion = (req, res) => {
         const temperatureIn = req.body.temperatureIn;
         const typeIn = req.body.typeIn;
         const typeTarget = req.body.typeTarget;
+        const studentResponse = req.body.studentResponse;
         const updatedAt = Date();
 
-        res.status(200).json({"data": "yess"});
+        if(!questionId || !worksheetId){
+            res.status(400).json({"error": "worksheetId and questionId requried"});
+            return;
+        }
 
+        var query = 'UPDATE question SET\
+                    worksheetId = COALESCE(?,worksheetId),\
+                    temperatureIn = COALESCE(?,temperatureIn),\
+                    typeIn = COALESCE(?,typeIn),\
+                    typeTarget = COALESCE(?,typeTarget),\
+                    studentResponse = COALESCE(?,studentResponse),\
+                    updatedAt = COALESCE(?,updatedAt)\
+                    WHERE id = ?';
+        var params = [
+            worksheetId,
+            temperatureIn,
+            typeIn,
+            typeTarget,
+            studentResponse,
+            updatedAt,
+            questionId,
+        ];
 
-        //TODO: recalculate values and set new one in table.
+        db.run(query, params, function(err, result){
+            if (err){
+                res.status(400).json({"error": res.message})
+                return;
+            }
+            res.json({
+                message: "success",
+                changes: this.changes,
+            });
+        });
         
     } catch (error) {
         res.status(400).json({error: error.message});
@@ -80,6 +126,7 @@ const postQuestion = (req, res) => {
     const typeIn = req.body.typeIn;
     const typeTarget = req.body.typeTarget;
     const studentResponse = req.body.studentResponse;
+    const today = Date();
 
     //check for empty values
     if(!temperatureIn || !typeIn || !typeTarget || !studentResponse){
@@ -89,16 +136,132 @@ const postQuestion = (req, res) => {
 
     //2
     var temperature = parseFloat(temperatureIn)
-    var stdResponse = parseFloat(studentResponse);
+    var stdResponse = parseFloat(studentResponse).toFixed(decimalPlaces);
 
     if(isNaN(temperature) || isNaN(stdResponse)){
-        res.status(400).json({"error": "Either Input Temperature or Students\' response isn\'t a numeric value"});
+
+        var grade = grades.INVALID;
+        
+
+        var query = 'INSERT INTO question (\
+            worksheetId,\
+            temperatureIn,\
+            typeIn,\
+            typeTarget,\
+            studentResponse,\
+            grade,\
+            createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    
+        var params = [
+            worksheetId,
+            temperatureIn,
+            typeIn,
+            typeTarget,
+            studentResponse,
+            grade,
+            today
+        ];
+
+        db.run(query, params, function(err, result){
+            if (err) {
+                res.status(400).json({"error":err.message});
+                return;
+            }
+            res.status(201).json({
+                "message":"success",
+                "id": this.lastID
+            });
+    
+        });
+
         return;
     }
     //3 
-    
 
-    res.status(200).json({"data": [temperature.toFixed(1), stdResponse.toFixed(1)]});
+    var fromTemp = typeIn.charAt(0).toUpperCase();
+    var toTemp =  typeTarget.charAt(0).toUpperCase();
+    var answer;
+    // 4
+    if( fromTemp == units.KELVIN && toTemp == units.CELSIUS ){
+        answer = converter.kelvinToCelsius(temperature).toFixed(decimalPlaces);
+
+    }else if( fromTemp == units.KELVIN && toTemp == units.FAHRENHEIT ){
+        answer = converter.kelvinToFahrenheit(temperature).toFixed(decimalPlaces);
+
+    }else if( fromTemp == units.KELVIN && toTemp == units.RANKIE ){
+        answer = converter.kelvinToRankie(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.CELSIUS && toTemp == units.KELVIN){
+        answer = converter.celsiusToKelvin(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.CELSIUS && toTemp == units.FAHRENHEIT){
+        answer = converter.celsiusToFahrenheit(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.CELSIUS && toTemp == units.RANKIE){
+        answer = converter.celsiusToRankie(temperature).toFixed(decimalPlaces);
+        
+    }else if(fromTemp == units.FAHRENHEIT && toTemp == units.CELSIUS){
+        answer = converter.fahrenheitToCelsius(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.FAHRENHEIT && toTemp == units.KELVIN){
+        answer = converter.fahrenheitToKelvin(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.FAHRENHEIT && toTemp == units.RANKIE){
+        answer = converter.fahrenheitToRankie(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.RANKIE && toTemp == units.KELVIN){
+        answer = converter.rankieToKelvin(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.RANKIE && toTemp == units.CELSIUS){
+        answer = converter.rankieToCelsius(temperature).toFixed(decimalPlaces);
+
+    }else if(fromTemp == units.RANKIE && toTemp == units.FAHRENHEIT){
+        answer = converter.rankieToFahrenheit(temperature).toFixed(decimalPlaces);
+    }else{
+        // invalid unit of conversions
+        answer = null;
+    }
+    //5
+    var grade = grades.INVALID;
+
+    if(answer == null){
+        grade = grades.INVALID;
+    }else if(answer == stdResponse){
+        grade = grades.CORRECT;
+    }else{
+        grade = grades.INCORRECT;
+    }
+
+    // 6 
+    var query = 'INSERT INTO question (\
+        worksheetId,\
+        temperatureIn,\
+        typeIn,\
+        typeTarget,\
+        studentResponse,\
+        grade,\
+        createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)';
+
+    var params = [
+        worksheetId,
+        temperatureIn,
+        typeIn,
+        typeTarget,
+        studentResponse,
+        grade,
+        today
+    ];
+    db.run(query, params, function(err, result){
+        if (err) {
+            res.status(400).json({"error":err.message});
+            return;
+        }
+        res.status(201).json({
+            "message":"success",
+            "id": this.lastID
+        });
+
+    });
 }
 
 const deleteQuestion = (req, res) => {
